@@ -6,7 +6,7 @@ function MainNav() {
   return (
     <>
       <Header />
-      <main>
+      <main className='p-10'>
         <Outlet />
       </main>
     </>
