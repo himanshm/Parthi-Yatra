@@ -11,6 +11,8 @@ import Spinner from './components/UI/Spinner';
 const AppLayoutPage = lazy(() => import('./pages/MainNav.tsx'));
 const UserLoginPage = lazy(() => import('./pages/UserLogin.tsx'));
 const UserForgotPassPage = lazy(() => import('./pages/UserForgotPassword.tsx'));
+const UserInfoPage = lazy(() => import('./pages/UserInfo.tsx'));
+const YatriDataPage = lazy(() => import('./pages/YatriData.tsx'));
 
 const SuspenseLayout = () => {
   return (
@@ -30,6 +32,8 @@ const Root = (
           <UserForgotPassPage message='Please contact your admin for a new password. Sai Ram 🙏.' />
         }
       />
+      <Route path='/user-info' element={<UserInfoPage />} />
+      <Route path='/yatri-data' element={<YatriDataPage />} />
     </Route>
   </Route>
 );

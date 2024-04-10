@@ -1,6 +1,7 @@
 import { userNavItems } from '../../utils/app-data';
 import logoImg from '../../assets/Org-Logo.png';
 import Logo from './Logo';
+import Button from './Button';
 
 type HeaderProps = {
   title?: string;
@@ -15,11 +16,11 @@ function Header({ title }: HeaderProps) {
       </div>
       <nav className='flex items-center gap-2'>
         {userNavItems.map((navItem) => {
-          const { id, name } = navItem;
+          const { id, name, to } = navItem;
           return (
-            <li className='list-none' key={id}>
+            <Button key={id} btntype='small' to={to}>
               {name}
-            </li>
+            </Button>
           );
         })}
       </nav>

@@ -3,7 +3,7 @@ import Input from '../components/UI/Input';
 
 function UserLogin() {
   return (
-    <div className='w-full max-w-sm p-4  border rounded-lg shadow sm:p-6 md:p-8 bg-gray-800 border-gray-700'>
+    <div className='w-full max-w-sm p-4 border rounded-lg shadow'>
       <form className='space-y-6'>
         <h5 className='text-xl font-medium text-[#D9B471] text-center'>
           Sign in
