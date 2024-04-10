@@ -34,7 +34,7 @@ function Yatri({
   };
 
   return (
-    <div className='w-full max-w-sm p-4 border rounded-lg shadow border-gray-700 space-y-5'>
+    <div className='w-full max-w-sm py-2 px-3 border rounded-lg shadow border-gray-700 space-y-3'>
       <YatriDetail
         details={[
           { label: 'Name', value: name },

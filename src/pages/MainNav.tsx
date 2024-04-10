@@ -5,7 +5,7 @@ import Header from '../components/UI/Header';
 function MainNav() {
   return (
     <>
-      <Header />
+      <Header title='Parthi Yatra Registration' />
       <main className='p-10'>
         <Outlet />
       </main>
