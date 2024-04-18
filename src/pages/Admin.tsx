@@ -1,12 +1,6 @@
 import Login from '../components/UI/Login';
-import Button from '../components/UI/Button';
 
 function Admin() {
-  const adminActions = (
-    <Button to='/admin-signup' btntype='textOnly'>
-      Register Here!
-    </Button>
-  );
   return (
     <>
       <div className='py-3'>
@@ -16,7 +10,7 @@ function Admin() {
         </p>
       </div>
 
-      <Login actions={adminActions} />
+      <Login />
     </>
   );
 }

@@ -6,11 +6,11 @@ function CreateNew() {
   const navigate = useNavigate();
 
   const handleCreateUser = () => {
-    navigate('user');
+    navigate('new-user');
   };
 
   const handleCreateAdmin = () => {
-    navigate('admin');
+    navigate('new-admin');
   };
 
   return (

@@ -1,12 +1,8 @@
-import Button from '../components/UI/Button';
 import Login from '../components/UI/Login';
+import ForgotPassword from '../components/user/ForgotPassword.tsx';
 
 function UserLogin() {
-  const userActions = (
-    <Button to='/forgot-password' btntype='textOnly'>
-      Lost Password?
-    </Button>
-  );
+  const userActions = <ForgotPassword />;
   return <Login actions={userActions} />;
 }
 

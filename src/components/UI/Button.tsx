@@ -27,10 +27,12 @@ function Button({ children, to, btntype, ...props }: ButtonProps) {
     secondary:
       'w-20 px-5 py-2.5 md:px-6 md:py-3.5 border-2 border-stone-300 text-stone-400 hover:text-stone-800',
     tertiary: 'w-20 px-5 py-3',
-    textOnly: 'font-semibold text-[#049DD9]',
+    textOnly:
+      'inline-block text-sm font-semibold text-[#049DD9] hover:text-[#047BA9] focus:outline-none focus:text-[#046587]',
   };
 
-  const style = `${base} ${sizes[btntype]}`;
+  const style =
+    btntype === 'textOnly' ? sizes[btntype] : `${base} ${sizes[btntype]}`;
 
   if (to) {
     return (
