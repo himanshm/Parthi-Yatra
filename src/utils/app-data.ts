@@ -17,6 +17,24 @@ export const userNavItems: NavItem[] = [
   },
 ];
 
+export const adminNavItems: NavItem[] = [
+  {
+    id: '1',
+    name: 'Login',
+    to: '/admin',
+  },
+  {
+    id: '2',
+    name: 'Create New',
+    to: '/admin/create-new',
+  },
+  {
+    id: '3',
+    name: 'Control Data',
+    to: 'admin/data-control',
+  },
+];
+
 export const trains = [
   '17603 (काचेगुड़ा एक्सप्रेस)',
   '12628 (कर्नाटका एक्सप्रेस)',
