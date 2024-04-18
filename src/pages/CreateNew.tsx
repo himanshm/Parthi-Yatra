@@ -19,7 +19,10 @@ function CreateNew() {
         <h2 className='text-xl font-bold text-center py-2'>
           Sai Ram, Admin 🙏
         </h2>
-        <p className='text-xs text-center'>What would you like to do today?</p>
+        <p className='text-xs text-center py-2'>
+          What would you like to do today?
+        </p>
+        <hr />
       </div>
       <div className='flex gap-4 my-3 mx-1'>
         <Button btntype='primary' onClick={handleCreateUser}>
@@ -29,6 +32,7 @@ function CreateNew() {
           Create New Admin
         </Button>
       </div>
+      <hr />
       <Outlet />
     </>
   );
