@@ -24,6 +24,7 @@ function CreateAdmin() {
     },
   });
 
+  const [resMessage, setResMessage] = useState('');
   const [adminCredentials, setAdminCredentials] =
     useState<AdminResponse | null>(null);
   const [openModel, setOpenModel] = useState(false);
@@ -44,6 +45,7 @@ function CreateAdmin() {
       const result = await response.json();
       if (response.ok) {
         setAdminCredentials(result.admin); // Store the admin details
+        setResMessage(result.message);
         handleShowModal();
         reset();
       } else {
@@ -85,6 +87,7 @@ function CreateAdmin() {
 
       {openModel && adminCredentials && (
         <Modal isOpen={openModel} onClose={handleCloseModal}>
+          <p>{resMessage}</p>
           <p>Please note down the following details:</p>
           <p>Username: {adminCredentials.username}</p>
           <p>Temporary Password: {adminCredentials.temporaryPassword}</p>

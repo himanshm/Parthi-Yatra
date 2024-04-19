@@ -21,8 +21,21 @@ function Login({ actions }: LoginProps) {
     },
   });
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    try {
+      const response = await fetch(`${apiUrl}/admin/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
 
     reset();
   };

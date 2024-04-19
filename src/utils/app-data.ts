@@ -25,7 +25,7 @@ export const adminNavItems: NavItem[] = [
   },
   {
     id: '2',
-    name: 'Create New',
+    name: 'Create New User',
     to: '/admin/create-new',
   },
   {

@@ -1,13 +1,12 @@
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
-import CreateNewForm from '../components/admin/CreateNewForm';
-import Input from '../components/UI/Input';
+import CreateNewForm from './admin/CreateNewForm';
+import Input from './UI/Input';
 
 interface UFormInputs {
   fullName: string;
   email: string;
-  phone: string;
-  district: string;
+  role: 'user' | 'admin';
 }
 
 function CreateUser() {
@@ -15,8 +14,7 @@ function CreateUser() {
     defaultValues: {
       fullName: '',
       email: '',
-      phone: '',
-      district: '',
+      role: 'user',
     },
   });
 
@@ -45,19 +43,19 @@ function CreateUser() {
         )}
       />
       <Controller
-        name='phone'
+        name='role'
         control={control}
         rules={{ required: true }}
-        render={({ field }) => (
-          <Input {...field} type='text' label='Mobile No.' id='phone' />
-        )}
-      />
-      <Controller
-        name='district'
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <Input {...field} type='text' label='District' id='district' />
+        render={({ field: { onChange, onBlur, value, ref } }) => (
+          <Input
+            type='text'
+            label='Role'
+            id='role'
+            value={value}
+            onBlur={onBlur}
+            ref={ref}
+            onChange={(e) => onChange(e.target.value.toLowerCase())}
+          />
         )}
       />
     </>

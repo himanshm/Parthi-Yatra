@@ -13,9 +13,7 @@ const UserLoginPage = lazy(() => import('./pages/UserLogin.tsx'));
 const UserInfoPage = lazy(() => import('./pages/UserInfo.tsx'));
 const YatriDataPage = lazy(() => import('./pages/YatriData.tsx'));
 const AdminPage = lazy(() => import('./pages/Admin.tsx'));
-const CreateNewPage = lazy(() => import('./pages/CreateNew.tsx'));
-const CreateUserPage = lazy(() => import('./pages/CreateUser.tsx'));
-const CreateAdminPage = lazy(() => import('./pages/CreateAdmin.tsx'));
+const CreateNewPage = lazy(() => import('./pages/CreateNewUser.tsx'));
 
 const SuspenseLayout = () => {
   return (
@@ -33,10 +31,7 @@ const Root = (
       <Route path='/yatri-data' element={<YatriDataPage />} />
       {/* Apply route protection later below */}
       <Route path='/admin' element={<AdminPage />} />
-      <Route path='/admin/create-new' element={<CreateNewPage />}>
-        <Route path='new-user' element={<CreateUserPage />} />
-        <Route path='new-admin' element={<CreateAdminPage />} />
-      </Route>
+      <Route path='/admin/create-new' element={<CreateNewPage />} />
     </Route>
   </Route>
 );
