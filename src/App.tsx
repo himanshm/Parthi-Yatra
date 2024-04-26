@@ -7,6 +7,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import Spinner from './components/UI/Spinner';
+import AuthProvider from './context/AuthContext.tsx';
 
 const AppLayoutPage = lazy(() => import('./pages/MainNav.tsx'));
 const UserLoginPage = lazy(() => import('./pages/UserLogin.tsx'));
@@ -38,7 +39,11 @@ const Root = (
 
 function App() {
   const router = createBrowserRouter(createRoutesFromElements(Root));
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

@@ -1,8 +1,11 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import Button from './Button';
 import Input from './Input';
+import { useAuth } from '../../context/useAuth';
+import Modal from './Modal';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormInputs {
   username: string;
@@ -14,27 +17,35 @@ type LoginProps = {
 };
 
 function Login({ actions }: LoginProps) {
+  const { login, isFirstLogin, message, user } = useAuth();
+  const navigate = useNavigate();
   const { control, reset, handleSubmit } = useForm<LoginFormInputs>({
     defaultValues: {
       username: '',
       password: '',
     },
   });
+  const [openModel, setOpenModel] = useState(false);
+
+  const handleShowModal = () => setOpenModel(true);
+  const handleCloseModal = () => setOpenModel(false);
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    try {
-      const response = await fetch(`${apiUrl}/admin/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+    await login(data.username, data.password);
 
-      const result = await response.json();
-    } catch (error) {
-      console.error('Error during login:', error);
+    if (isFirstLogin) {
+      handleShowModal();
+    } else {
+      switch (user?.role) {
+        case 'user':
+          navigate('/user-info');
+          break;
+        case 'admin':
+          navigate('/admin/create-new');
+          break;
+        default:
+          break;
+      }
     }
 
     reset();
@@ -69,6 +80,12 @@ function Login({ actions }: LoginProps) {
           Login
         </Button>
       </form>
+
+      {openModel && (
+        <Modal isOpen={openModel} onClose={handleCloseModal}>
+          <p>{message}</p>
+        </Modal>
+      )}
     </div>
   );
 }

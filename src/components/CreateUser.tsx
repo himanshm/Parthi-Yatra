@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import CreateNewForm from './admin/CreateNewForm';
 import Input from './UI/Input';
+import { useAuth } from '../context/useAuth';
+import Modal from './UI/Modal';
 
 interface UFormInputs {
   fullName: string;
@@ -10,6 +13,7 @@ interface UFormInputs {
 }
 
 function CreateUser() {
+  const { signup, user, message } = useAuth();
   const { control, handleSubmit, reset } = useForm<UFormInputs>({
     defaultValues: {
       fullName: '',
@@ -17,11 +21,19 @@ function CreateUser() {
       role: 'user',
     },
   });
+  const [openModel, setOpenModel] = useState(false);
+
+  const handleShowModal = () => setOpenModel(true);
+  const handleCloseModal = () => setOpenModel(false);
 
   const onSubmit: SubmitHandler<UFormInputs> = (data) => {
-    console.log(data);
-
-    reset();
+    try {
+      signup(data.fullName, data.email, data.role);
+      handleShowModal();
+      reset();
+    } catch (err) {
+      console.error('Signup error:', err);
+    }
   };
 
   const userInputs = (
@@ -61,11 +73,28 @@ function CreateUser() {
     </>
   );
   return (
-    <CreateNewForm
-      inputs={userInputs}
-      entity='user'
-      onSubmit={handleSubmit(onSubmit)}
-    ></CreateNewForm>
+    <>
+      <CreateNewForm
+        inputs={userInputs}
+        entity='user'
+        onSubmit={handleSubmit(onSubmit)}
+      />
+
+      {openModel && user && (
+        <Modal isOpen={openModel} onClose={handleCloseModal}>
+          <p className='text-xl font-medium p-2 text-[#049DD9]'>{message}</p>
+          <p className='text-l font-medium p-2'>
+            Please note down the following details:
+          </p>
+          <p className='text-l font-normal py-1 px-2 text-yellow-800'>
+            Username: {user.username}
+          </p>
+          <p className='text-l font-normal py-1 px-2 text-yellow-800'>
+            Temporary Password: {user.temporaryPassword}
+          </p>
+        </Modal>
+      )}
+    </>
   );
 }
 

@@ -3,37 +3,44 @@ import { createContext, ReactNode, useCallback, useState } from 'react';
 interface User {
   id: string;
   username: string;
-  email: string;
-  role: 'user';
+  temporaryPassword?: string;
+  role: 'user' | 'admin';
 }
-
-interface Admin {
-  id: string;
-  username: string;
-  email: string;
-  role: 'admin';
-}
-
-// Union type for AuthenticatedUser
-type AuthenticatedUser = User | Admin;
 
 interface AuthState {
   isAuthenticated: boolean;
-  user?: AuthenticatedUser;
+  user?: User;
   token?: string;
+  isFirstLogin?: boolean;
+  message?: string;
+}
+
+interface LoginResponse {
+  userId: string;
+  username: string;
+  role: 'user' | 'admin';
+  token: string;
+  isFirstLogin: boolean;
+  message: string;
+  errMessage?: string;
+  errData?: string[];
+}
+
+interface SignupResponse {
+  user: User;
+  message: string;
+  errMessage?: string;
+  errData?: string[];
 }
 
 interface AuthContextType extends AuthState {
-  login: (
-    username: string,
-    password: string,
-    type: 'user' | 'admin'
-  ) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   signup: (
     fullName: string,
     email: string,
-    type: 'user' | 'admin'
+    role: 'user' | 'admin'
   ) => Promise<void>;
+  updatePassword: (username: string, newPassword: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -52,20 +59,95 @@ function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated: false,
   });
 
-  const login = useCallback(
-    async (username: string, password: string, type: 'user' | 'admin') => {
-      const url =
-        type === 'admin' ? `${apiUrl}/admin/login` : `${apiUrl}/user/login`;
+  const login = useCallback(async (username: string, password: string) => {
+    try {
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
 
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password }),
+      const data: LoginResponse = await response.json();
+      if (response.ok) {
+        setAuthState({
+          isAuthenticated: true,
+          user: { id: data.userId, username, role: data.role },
+          token: data.token,
+          isFirstLogin: data.isFirstLogin,
+          message: data.message,
         });
-      } catch (error) {}
+        localStorage.setItem('token', data.token);
+      } else {
+        throw new Error(data.errMessage || 'Authentication Failed!');
+      }
+    } catch (error) {
+      console.error('Login Error', error);
+    }
+  }, []);
+
+  const signup = useCallback(
+    async (fullName: string, email: string, role: 'user' | 'admin') => {
+      try {
+        const res = await fetch(`${apiUrl}/auth/signup`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, role }),
+        });
+
+        const data: SignupResponse = await res.json();
+        if (res.ok) {
+          setAuthState({
+            isAuthenticated: false,
+            user: data.user,
+            message: data.message,
+          });
+        } else {
+          throw new Error(data.errMessage || 'Signup Failed!');
+        }
+      } catch (error) {
+        console.error('Login Error', error);
+      }
     },
     []
+  );
+
+  const updatePassword = useCallback(
+    async (username: string, newPassword: string) => {
+      const res = await fetch(`${apiUrl}/auth/update-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, newPassword }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setAuthState((prevState) => {
+          return { ...prevState, isFirstLogin: false, message: data.message };
+        });
+      } else {
+        throw new Error(data.errMessage || 'Password to update password!');
+      }
+    },
+    []
+  );
+
+  const logout = useCallback(async () => {
+    setAuthState({ isAuthenticated: false });
+    localStorage.removeItem('token');
+  }, []);
+
+  const authContextValue: AuthContextType = {
+    ...authState,
+    login,
+    signup,
+    updatePassword,
+    logout,
+  };
+
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 
