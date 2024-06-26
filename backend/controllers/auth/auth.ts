@@ -1,15 +1,12 @@
 import { RequestHandler } from 'express';
-import { getPrivateKey } from '../../../config/getEnvVars';
+import { getPrivateKey } from '../../config/getEnvVars';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 import User from '../../models/user';
 import { validationResult } from 'express-validator';
-import HttpError, { handleError } from '../../../config/httpError';
-import {
-  extractUsername,
-  createTempPassword,
-} from '../../../utils/utilFunctions';
+import HttpError, { handleError } from '../../config/httpError';
+import { extractUsername, createTempPassword } from '../../utils/utilFunctions';
 
 const privateKey = getPrivateKey();
 
